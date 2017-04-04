@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Exercice Node</title>
+  </head>
+  <body>
+    <h2>Voici la liste des utilisateurs (en ejs héhé)</h2>
+      <ul style="background-color: red;"><% users.map(function(item){%>
+        <li><%= item.firstName %></li>
+      <% }) %></ul>
+    <script src="ejs.js"></script>
+  </body>
+</html>
