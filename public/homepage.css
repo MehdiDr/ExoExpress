@@ -9,9 +9,9 @@ body{
   font-family: 'Pacifico', cursive;
   letter-spacing: 0.5px;
   color: #010021;
+  font-family: sans-serif;
 }
-ul{
-  list-style: none;
-  flex-direction: row;
-  
+
+h2{
+
 }

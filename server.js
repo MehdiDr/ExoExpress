@@ -15,6 +15,7 @@ app.use(function(req, res, next) {
   console.log('Quelque chose se passe...');
   next();
 });
+app.use(express.static(__dirname + '/public'));
 
 app.get('/', function(req, res){
   res.render('pages/homepage')
@@ -47,12 +48,12 @@ app.post('/addUsers',function(req, res){
   pg.connect(urlDB2, function(err, client, done){
     client.query('INSERT INTO users(firstname, lastname, age) VALUES ($1, $2, $3);', [users.firstname, users.lastname, users.age], function(err, result){
       done();
-      res.send('added');
+      res.send('Welcome to the family');
     });
   });
 })
 
-app.get('/test', function(req, res){
+app.get('/addUsers', function(req, res){
   res.render('pages/addUsers');
 })
 
