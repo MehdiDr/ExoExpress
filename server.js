@@ -2,65 +2,109 @@ const express = require('express');
 const app= express();
 const port = process.env.PORT || 5000;
 const ejs = require('ejs');
-const users = [
-  {id: 0, firstName: 'Michel'},
-  {id: 1, firstName: 'Osman'},
-  {id: 2, firstName: 'Tandi'},
-  {id: 3, firstName: 'Daniel'},
-  {id: 4, firstName: 'Faustino'},
-  {id: 5, firstName: 'Ijacques'}
-  ];
+const users = require('./data/users');
+const projects = require('./data/projects');
+const pg = require('pg');
+const bodyParser = require('body-parser');
+const urlDB = 'postgres://postgres:*****@localhost:5432/coucou';
+const urlDB2 =  process.env.DATABASE_URL || 'postgres://postgres:*****@localhost:5432/base1';
 
-html = ejs.render('<%= users.join(", "); %>', {users: users});
-
-const router = express.Router();
-
-app.use('/', router);
 app.set('view engine', 'ejs');
-
-router.use(function(req, res, next) {
+app.use(bodyParser.urlencoded({ extended: false}));
+app.use(function(req, res, next) {
   console.log('Quelque chose se passe...');
   next();
 });
 
-router.route('/')
-  .get(function(req, res) {
-    res.setHeader('Content-Type', 'text-plain');
-    res.end('Homepage');
-  })
-
-app.get('/users', function(req, res){
-  res.render('pages/index', {
-    users:users
-  });
+app.get('/', function(req, res){
+  res.render('pages/homepage')
 });
+
+
+app.get('/users', function(req, res, next){
+  const user = req.body;
+
+  pg.connect(urlDB, function(err, client, done){
+    if(err) { return next(err); }
+    client.query('SELECT * FROM person', function(err, result){
+      done()
+      if(err){ return next(err) }
+      // res.send(JSON.stringify(result.rows))
+      res.render('pages/users', {
+        users : result.rows
+      });
+    });
+  });
+  // res.render('pages/users', {
+  //   users:users
+  // });
+});
+
+app.post('/addUsers',function(req, res){
+  const users = {firstname: req.body.firstname, lastname : req.body.lastname, age : req.body.age};
+  console.log(users);
+
+  pg.connect(urlDB2, function(err, client, done){
+    client.query('INSERT INTO users(firstname, lastname, age) VALUES ($1, $2, $3);', [users.firstname, users.lastname, users.age], function(err, result){
+      done();
+      res.send('added');
+    });
+  });
+})
+
+app.get('/test', function(req, res){
+  res.render('pages/addUsers');
+})
+
+
+// méthode find à la place de if
 app.get('/users/:id', function(req, res){
-  res.render('pages/soloUser', {
-    users:users,
-    id:req.params.id
+  let usersId = users.find(function(item){
+    return item.id === Number(req.params.id);
+    })
+    if(usersId) {
+      res.render('pages/soloUser', {
+        users:users,
+        id:req.params.id,
+        githubUrl: projects.githubUrl
+      });
+    }
+    else{
+      res.send('error');
+    }
+});
+
+app.get('/projects', function(req, res){
+  res.render('pages/projects', {
+    projects:projects
   });
 });
 
-  // router.route('/users')
-  //   .get(function(req, res) {
-  //     res.setHeader('Content-Type', 'text-plain');
-  //     res.end("la liste d'utilisateurs est : " + users.map( function(item){
-  //       return item.firstName;
-  //     }));
-  //   });
+app.get('/projects/:id', function(req, res){
+  res.render('pages/soloProject', {
+    projects: projects,
+    id: req.params.id
+  });
+});
 
-// router.route('/users')
-//   .get(function(req, res) {
-//     res.setHeader('Content-Type', 'text-plain');
-//     res.end(html);
-//   });
+app.get('/users/:userId/projects', function(req, res){
+  let userId = projects.filter(function(item){
+    return item.userId === Number(req.params.userId)
+  })
+  if(userId) {
+    res.render('pages/userProject', {
+      projects: projects,
+      userId: req.params.userId
+    });
+  }
+  else{
+    res.send('page non trouvée mf !!')
+  }
+})
 
-
-// router.route('/users/:id')
-//   .get(function(req, res){
-//     res.setHeader('Content-type', 'text-plain');
-//     res.end("le nom de l'utilisateur est : " + users[req.params.id].firstName);
-//   });
+app.get('*', function(req, res){
+  res.status(404).send('vous vous êtes trompés de page, vous êtes nuls');
+})
 
 app.listen(port);
 console.log('port 5000');

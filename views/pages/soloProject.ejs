@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Exo EJS</title>
+  </head>
+  <body>
+    <p>
+      Voici l'utilisateur en fonction de l'id :
+    </p>
+    <p>
+      <%= projects[id].name %>
+    </p>
+    <p>Voici le lien pour aller voir !!!</p>
+    <p>
+      <a href="<%=  projects[id].githubUrl %>">Lien</a>
+    </p>
+  </body>
+</html>

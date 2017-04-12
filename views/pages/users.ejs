@@ -6,8 +6,8 @@
   </head>
   <body>
     <h2>Voici la liste des utilisateurs (en ejs héhé)</h2>
-      <ul style="background-color: red;"><% users.map(function(item){%>
-        <li><%= item.firstName %></li>
+      <ul style='list-style-type:none;'><% users.map(function(item){%>
+        <li><%= item.nom %></li>
       <% }) %></ul>
     <script src="ejs.js"></script>
   </body>
