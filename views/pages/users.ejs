@@ -1,13 +1,20 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="stylesheet" href="style.css" media="screen" title="no title">
+      <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
     <meta charset="utf-8">
     <title>Exercice Node</title>
   </head>
   <body>
     <h2>Voici la liste des utilisateurs (en ejs héhé)</h2>
+<<<<<<< HEAD:views/pages/users.ejs
       <ul style='list-style-type:none;'><% users.map(function(item){%>
         <li><%= item.nom %></li>
+=======
+      <ul><% users.map(function(item){%>
+        <li><%= item.firstName %></li>
+>>>>>>> bc5328a4d79d3135eae6a6dc8658771186a0eab0:views/pages/index.ejs
       <% }) %></ul>
     <script src="ejs.js"></script>
   </body>
