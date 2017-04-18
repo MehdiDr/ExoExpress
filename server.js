@@ -8,7 +8,7 @@ const users = require('./data/users');
 const projects = require('./data/projects');
 const pg = require('pg');
 const bodyParser = require('body-parser');
-const urlDB = 'postgres://postgres:*****@localhost:5432/simplonp7';
+const urlDB = 'postgres://postgres:*****@localhost:5432/base1';
 const urlDB2 =  process.env.DATABASE_URL || 'postgres://postgres:*****@localhost:5432/base1';
 
 app.set('view engine', 'ejs');
@@ -29,7 +29,7 @@ app.get('/users', function(req, res, next){
 
   pg.connect(urlDB, function(err, client, done){
     if(err) { return next(err); }
-    client.query('SELECT * FROM apprenants', function(err, result){
+    client.query('SELECT * FROM person', function(err, result){
       done()
       if(err){ return next(err) }
       // res.send(JSON.stringify(result.rows))
