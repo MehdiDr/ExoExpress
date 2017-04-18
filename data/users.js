@@ -1,7 +1,7 @@
 'use strict'
 
 module.exports = [
-  {id: 0, firstName: 'DavidoKetchup'},
+  {id: 0, firstName: 'David'},
   {id: 1, firstName: 'Jobalouk'},
   {id: 2, firstName: 'Paulo'},
   {id: 3, firstName: 'Matthieu'},

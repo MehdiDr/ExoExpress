@@ -1,3 +1,5 @@
+'use strict';
+
 const express = require('express');
 const app= express();
 const port = process.env.PORT || 5000;
@@ -6,7 +8,7 @@ const users = require('./data/users');
 const projects = require('./data/projects');
 const pg = require('pg');
 const bodyParser = require('body-parser');
-const urlDB = 'postgres://postgres:*****@localhost:5432/coucou';
+const urlDB = 'postgres://postgres:*****@localhost:5432/simplonp7';
 const urlDB2 =  process.env.DATABASE_URL || 'postgres://postgres:*****@localhost:5432/base1';
 
 app.set('view engine', 'ejs');
@@ -27,7 +29,7 @@ app.get('/users', function(req, res, next){
 
   pg.connect(urlDB, function(err, client, done){
     if(err) { return next(err); }
-    client.query('SELECT * FROM person', function(err, result){
+    client.query('SELECT * FROM apprenants', function(err, result){
       done()
       if(err){ return next(err) }
       // res.send(JSON.stringify(result.rows))
@@ -36,9 +38,6 @@ app.get('/users', function(req, res, next){
       });
     });
   });
-  // res.render('pages/users', {
-  //   users:users
-  // });
 });
 
 app.post('/addUsers',function(req, res){
@@ -104,7 +103,7 @@ app.get('/users/:userId/projects', function(req, res){
 })
 
 app.get('*', function(req, res){
-  res.status(404).send('vous vous êtes trompés de page, vous êtes nuls');
+  res.status(404).send('vous vous êtes trompés de page, vous êtes nuls...');
 })
 
 app.listen(port);
